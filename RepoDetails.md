@@ -20,11 +20,11 @@ Release branches may be created as needed to facilitate a specific release with 
 
 Since this project does not follow the release fork model, the code should be
 consumed from a release hash and should be consumed as a extdep in the platform
-repo. To include, create a file named feature_config_apps_ext_dep.json desired release
+repo. To include, create a file named feature_config_apps_ext_dep.yaml desired release
 tag hash. This could be in the root of the project or in a subdirectory as
 desired.
 
-```json
+```yaml
 {
   "scope": "global",
   "type": "git",
