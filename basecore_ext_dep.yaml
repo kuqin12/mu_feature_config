@@ -1,0 +1,14 @@
+
+#
+# This external dependency pulls MU_BASECORE for the IPMI feature package CI.
+# This should not be pulled when consuming this package as a dependency.
+#
+{
+  "scope": "feature-configs-app-ci",
+  "type": "git",
+  "name": "MU_BASECORE",
+  "var_name": "BASECORE_PATH",
+  "source": "https://github.com/microsoft/mu_basecore.git",
+  "version": "13bda268702b7a15ba338f313891f82099785468", # release/202202
+  "flags": ["set_build_var"]
+}
