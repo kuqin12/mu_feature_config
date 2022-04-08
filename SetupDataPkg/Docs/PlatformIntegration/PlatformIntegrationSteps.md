@@ -123,9 +123,9 @@ will omit the integration steps for these features. For more information about D
   }
   SetupDataPkg/ConfApp/ConfApp.inf {
     <LibraryClasses>
-      MsSecureBootLib|OemPkg/Library/MsSecureBootLib/MsSecureBootLib.inf
+      MsSecureBootLib|SetupDataPkg/Private/Library/MsSecureBootLib/MsSecureBootLib.inf
       JsonLiteParserLib|MsCorePkg/Library/JsonLiteParser/JsonLiteParser.inf
-      PlatformKeyLib|OemPkg/Library/PlatformKeyLibNull/PlatformKeyLibNull.inf
+      PlatformKeyLib|SetupDataPkg/Private/Library/PlatformKeyLibNull/PlatformKeyLibNull.inf
   }
 ```
 

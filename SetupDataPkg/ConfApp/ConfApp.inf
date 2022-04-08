@@ -32,7 +32,6 @@
   MdeModulePkg/MdeModulePkg.dec
   SetupDataPkg/SetupDataPkg.dec
   PcBdsPkg/PcBdsPkg.dec
-  OemPkg/OemPkg.dec
   DfciPkg/DfciPkg.dec
   MsCorePkg/MsCorePkg.dec
   XmlSupportPkg/XmlSupportPkg.dec
@@ -48,7 +47,7 @@
   ResetSystemLib
   MuUefiVersionLib
   UefiBootManagerLib
-  MsSecureBootLib
+  MuSecureBootLib
   JsonLiteParserLib
   FileHandleLib
   DfciUiSupportLib
