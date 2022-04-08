@@ -21,6 +21,7 @@
 
 [Sources]
   MuSecureBootLib.c
+  MsSecureBootDefaultVars.h
 
 [Packages]
   MdePkg/MdePkg.dec
@@ -31,7 +32,7 @@
 
 [LibraryClasses]
   DebugLib
-#  PlatformKeyLib
+  PlatformKeyLib
   UefiBootServicesTableLib
 
 
