@@ -36,6 +36,7 @@
   MsCorePkg/MsCorePkg.dec
   XmlSupportPkg/XmlSupportPkg.dec
   PolicyServicePkg/PolicyServicePkg.dec
+  SecurityPkg/SecurityPkg.dec
 
 [LibraryClasses]
   BaseLib
@@ -47,7 +48,7 @@
   ResetSystemLib
   MuUefiVersionLib
   UefiBootManagerLib
-  MuSecureBootLib
+  UefiSecureBootLib
   JsonLiteParserLib
   FileHandleLib
   DfciUiSupportLib
