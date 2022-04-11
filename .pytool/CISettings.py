@@ -180,7 +180,9 @@ class Settings(CiSetupSettingsManager, CiBuildSettingsManager, UpdateSettingsMan
     def GetPackagesPath(self):
         ''' Return a list of workspace relative paths that should be mapped as edk2 PackagesPath '''
         result = [
-            shell_environment.GetBuildVars().GetValue("BASECORE_PATH", "")
+            shell_environment.GetBuildVars().GetValue("BASECORE_PATH", ""),
+            shell_environment.GetBuildVars().GetValue("MU_PLUS_PATH", ""),
+            shell_environment.GetBuildVars().GetValue("MU_OEM_PATH", "")
         ]
         for a in self.GetDependencies():
             result.append(a["Path"])
