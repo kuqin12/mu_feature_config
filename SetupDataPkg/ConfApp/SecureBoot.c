@@ -65,7 +65,7 @@ ConfAppKeyOptions  SecureBootEscTemplate = {
 
 UINTN              mSecBootOptionCount   = 0;
 ConfAppKeyOptions  *mSecBootStateOptions = NULL;
-UINTN              mSelectedKeyIndex     = MU_SB_CONFIG_NONE;
+UINT8              mSelectedKeyIndex     = MU_SB_CONFIG_NONE;
 CHAR16             *mKeyNameBuffer       = NULL;
 SecureBootState_t  mSecBootState         = SecureBootInit;
 UINTN              mCurrentState         = (UINTN)-1;
@@ -204,7 +204,7 @@ SecureBootMgr (
           DEBUG ((DEBUG_ERROR, "%a Error processing incoming keystroke - %r\n", __FUNCTION__, Status));
           ASSERT (FALSE);
         } else if (mSecBootState == SecureBootEnroll) {
-          mSelectedKeyIndex = KeyData.Key.UnicodeChar - '0';
+          mSelectedKeyIndex = (UINT8)(KeyData.Key.UnicodeChar - '0');
           if (mSelectedKeyIndex >= gSecureBootPayloadCount) {
             DEBUG ((DEBUG_ERROR, "%a The selected key does not exist - %d\n", __FUNCTION__, mSelectedKeyIndex));
             Status = EFI_BUFFER_TOO_SMALL;
