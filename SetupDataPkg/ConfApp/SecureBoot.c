@@ -33,11 +33,6 @@ typedef enum {
   SecureBootMax
 } SecureBootState_t;
 
-UINTN             mSecBootOptionCount = 0;
-ConfAppKeyOptions *mSecBootStateOptions = NULL;
-UINTN             mSelectedKeyIndex = MU_SB_CONFIG_NONE;
-CHAR16            *mKeyNameBuffer = NULL;
-
 ConfAppKeyOptions SecureBootClearTemplate = {
   .KeyName             = L"0",
   .KeyNameTextAttr     = EFI_TEXT_ATTR (EFI_YELLOW, EFI_BLACK),
@@ -55,7 +50,7 @@ ConfAppKeyOptions SecureBootEnrollTemplate = {
   .DescriptionTextAttr = EFI_TEXT_ATTR (EFI_WHITE, EFI_BLACK),
   .UnicodeChar         = '1',
   .ScanCode            = SCAN_NULL,
-  .EndState            = SecureBootClear
+  .EndState            = SecureBootEnroll
 };
 
 ConfAppKeyOptions SecureBootEscTemplate = {
@@ -68,6 +63,10 @@ ConfAppKeyOptions SecureBootEscTemplate = {
   .EndState            = SecureBootExit
 };
 
+UINTN             mSecBootOptionCount = 0;
+ConfAppKeyOptions *mSecBootStateOptions = NULL;
+UINTN             mSelectedKeyIndex = MU_SB_CONFIG_NONE;
+CHAR16            *mKeyNameBuffer = NULL;
 SecureBootState_t  mSecBootState = SecureBootInit;
 UINTN              mCurrentState = (UINTN)-1;
 
@@ -80,6 +79,18 @@ ResetGlobals (
   VOID
   )
 {
+  mSecBootOptionCount = 0;
+  if (mSecBootStateOptions != NULL) {
+    FreePool (mSecBootStateOptions);
+    mSecBootStateOptions = NULL;
+  }
+
+  mSelectedKeyIndex = MU_SB_CONFIG_NONE;
+  if (mKeyNameBuffer != NULL) {
+    FreePool (mKeyNameBuffer);
+    mKeyNameBuffer = NULL;
+  }
+
   mSecBootState = SecureBootInit;
   mCurrentState = (UINTN)-1;
 }
@@ -127,14 +138,14 @@ PrintSBOptions (
     mKeyNameBuffer[Index * 2] = L'0' + (CHAR16)Index;
     mKeyNameBuffer[Index * 2 + 1] = L'\0';
     mSecBootStateOptions[Index].KeyName = &mKeyNameBuffer[Index * 2];
-    mSecBootStateOptions[Index].UnicodeChar = L'0' + (CHAR16)Index;
+    mSecBootStateOptions[Index].UnicodeChar = '0' + (CHAR16)Index;
   }
 
   CopyMem (&mSecBootStateOptions[Index], &SecureBootClearTemplate, sizeof (ConfAppKeyOptions));
   mKeyNameBuffer[Index * 2] = L'0' + (CHAR16)Index;
   mKeyNameBuffer[Index * 2 + 1] = L'\0';
   mSecBootStateOptions[Index].KeyName = &mKeyNameBuffer[Index * 2];
-  mSecBootStateOptions[Index].UnicodeChar = L'0' + (CHAR16)Index;
+  mSecBootStateOptions[Index].UnicodeChar = '0' + (CHAR16)Index;
 
   Index ++;
   CopyMem (&mSecBootStateOptions[Index], &SecureBootEscTemplate, sizeof (ConfAppKeyOptions));
