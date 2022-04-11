@@ -182,7 +182,8 @@ class Settings(CiSetupSettingsManager, CiBuildSettingsManager, UpdateSettingsMan
         result = [
             shell_environment.GetBuildVars().GetValue("BASECORE_PATH", ""),
             shell_environment.GetBuildVars().GetValue("MU_PLUS_PATH", ""),
-            shell_environment.GetBuildVars().GetValue("MU_OEM_PATH", "")
+            shell_environment.GetBuildVars().GetValue("MU_OEM_PATH", ""),
+            shell_environment.GetBuildVars().GetValue("MU_TIANO_PATH", "")
         ]
         for a in self.GetDependencies():
             result.append(a["Path"])
