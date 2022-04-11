@@ -12,7 +12,7 @@
 
 #include <Protocol/DfciSettingsProvider.h>
 #include <Protocol/VariablePolicy.h>
- 
+
 #include <Library/DebugLib.h>
 #include <Library/PcdLib.h>
 #include <Library/PrintLib.h>
