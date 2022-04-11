@@ -51,6 +51,10 @@
   ConfigDataLib|SetupDataPkg/Library/ConfigDataLib/ConfigDataLib.inf
   ConfigBlobBaseLib|SetupDataPkg/Library/ConfigBlobBaseLib/ConfigBlobBaseLib.inf
 
+  SecureBootVariableLib|SecurityPkg/Library/SecureBootVariableLib/SecureBootVariableLib.inf
+  SecureBootVariableProvisionLib|SecurityPkg/Library/SecureBootVariableProvisionLib/SecureBootVariableProvisionLib.inf
+  MuSecureBootKeySelectorLib|MsCorePkg/Library/MuSecureBootKeySelectorLib/MuSecureBootKeySelectorLib.inf
+
 [LibraryClasses.ARM, LibraryClasses.AARCH64]
   NULL|MdePkg/Library/CompilerIntrinsicsLib/ArmCompilerIntrinsicsLib.inf        # MU_CHANGE
   NULL|MdePkg/Library/BaseStackCheckLib/BaseStackCheckLib.inf

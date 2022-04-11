@@ -33,7 +33,7 @@ typedef enum {
   SecureBootMax
 } SecureBootState_t;
 
-ConfAppKeyOptions SecureBootClearTemplate = {
+ConfAppKeyOptions  SecureBootClearTemplate = {
   .KeyName             = L"0",
   .KeyNameTextAttr     = EFI_TEXT_ATTR (EFI_YELLOW, EFI_BLACK),
   .Description         = L"None.\n",
@@ -43,7 +43,7 @@ ConfAppKeyOptions SecureBootClearTemplate = {
   .EndState            = SecureBootClear
 };
 
-ConfAppKeyOptions SecureBootEnrollTemplate = {
+ConfAppKeyOptions  SecureBootEnrollTemplate = {
   .KeyName             = L"1",
   .KeyNameTextAttr     = EFI_TEXT_ATTR (EFI_YELLOW, EFI_BLACK),
   .Description         = L"None.\n",
@@ -53,7 +53,7 @@ ConfAppKeyOptions SecureBootEnrollTemplate = {
   .EndState            = SecureBootEnroll
 };
 
-ConfAppKeyOptions SecureBootEscTemplate = {
+ConfAppKeyOptions  SecureBootEscTemplate = {
   .KeyName             = L"ESC",
   .KeyNameTextAttr     = EFI_TEXT_ATTR (EFI_YELLOW, EFI_BLACK),
   .Description         = L"Return to main menu.",
@@ -63,12 +63,12 @@ ConfAppKeyOptions SecureBootEscTemplate = {
   .EndState            = SecureBootExit
 };
 
-UINTN             mSecBootOptionCount = 0;
-ConfAppKeyOptions *mSecBootStateOptions = NULL;
-UINTN             mSelectedKeyIndex = MU_SB_CONFIG_NONE;
-CHAR16            *mKeyNameBuffer = NULL;
-SecureBootState_t  mSecBootState = SecureBootInit;
-UINTN              mCurrentState = (UINTN)-1;
+UINTN              mSecBootOptionCount   = 0;
+ConfAppKeyOptions  *mSecBootStateOptions = NULL;
+UINTN              mSelectedKeyIndex     = MU_SB_CONFIG_NONE;
+CHAR16             *mKeyNameBuffer       = NULL;
+SecureBootState_t  mSecBootState         = SecureBootInit;
+UINTN              mCurrentState         = (UINTN)-1;
 
 /**
   Helper internal function to reset all local variable in this file.
@@ -129,25 +129,25 @@ PrintSBOptions (
 
   Print (L"\n");
 
-  mSecBootOptionCount = gSecureBootPayloadCount + 2; // Two extra options for clear and exit
+  mSecBootOptionCount  = gSecureBootPayloadCount + 2; // Two extra options for clear and exit
   mSecBootStateOptions = AllocatePool (sizeof (ConfAppKeyOptions) * mSecBootOptionCount);
-  mKeyNameBuffer = AllocatePool ((sizeof (CHAR16) * 2) * mSecBootOptionCount);
-  for (Index = 0; Index < gSecureBootPayloadCount; Index ++) {
+  mKeyNameBuffer       = AllocatePool ((sizeof (CHAR16) * 2) * mSecBootOptionCount);
+  for (Index = 0; Index < gSecureBootPayloadCount; Index++) {
     CopyMem (&mSecBootStateOptions[Index], &SecureBootEnrollTemplate, sizeof (ConfAppKeyOptions));
     mSecBootStateOptions[Index].Description = gSecureBootPayload[Index].SecureBootKeyName;
-    mKeyNameBuffer[Index * 2] = L'0' + (CHAR16)Index;
-    mKeyNameBuffer[Index * 2 + 1] = L'\0';
-    mSecBootStateOptions[Index].KeyName = &mKeyNameBuffer[Index * 2];
+    mKeyNameBuffer[Index * 2]               = L'0' + (CHAR16)Index;
+    mKeyNameBuffer[Index * 2 + 1]           = L'\0';
+    mSecBootStateOptions[Index].KeyName     = &mKeyNameBuffer[Index * 2];
     mSecBootStateOptions[Index].UnicodeChar = '0' + (CHAR16)Index;
   }
 
   CopyMem (&mSecBootStateOptions[Index], &SecureBootClearTemplate, sizeof (ConfAppKeyOptions));
-  mKeyNameBuffer[Index * 2] = L'0' + (CHAR16)Index;
-  mKeyNameBuffer[Index * 2 + 1] = L'\0';
-  mSecBootStateOptions[Index].KeyName = &mKeyNameBuffer[Index * 2];
+  mKeyNameBuffer[Index * 2]               = L'0' + (CHAR16)Index;
+  mKeyNameBuffer[Index * 2 + 1]           = L'\0';
+  mSecBootStateOptions[Index].KeyName     = &mKeyNameBuffer[Index * 2];
   mSecBootStateOptions[Index].UnicodeChar = '0' + (CHAR16)Index;
 
-  Index ++;
+  Index++;
   CopyMem (&mSecBootStateOptions[Index], &SecureBootEscTemplate, sizeof (ConfAppKeyOptions));
 
   Status = PrintAvailableOptions (mSecBootStateOptions, mSecBootOptionCount);
@@ -216,8 +216,7 @@ SecureBootMgr (
       break;
     case SecureBootClear:
       DEBUG ((DEBUG_INFO, "Selected clear Secure Boot Key\n"));
-      if (mCurrentState != MU_SB_CONFIG_NONE)
-      {
+      if (mCurrentState != MU_SB_CONFIG_NONE) {
         Status = DeleteSecureBootVariables ();
         if (!EFI_ERROR (Status)) {
           mSecBootState = SecureBootConfChange;

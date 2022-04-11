@@ -15,13 +15,13 @@
 #define NO_TRANSITION_STATE  MAX_UINTN
 
 typedef struct {
-  CONST CHAR16  *KeyName;
-  UINT8         KeyNameTextAttr;
-  CONST CHAR16  *Description;
-  UINT8         DescriptionTextAttr;
-  CHAR16        UnicodeChar;
-  CHAR16        ScanCode;
-  UINTN         EndState;
+  CONST CHAR16    *KeyName;
+  UINT8           KeyNameTextAttr;
+  CONST CHAR16    *Description;
+  UINT8           DescriptionTextAttr;
+  CHAR16          UnicodeChar;
+  CHAR16          ScanCode;
+  UINTN           EndState;
 } ConfAppKeyOptions;
 
 /**
