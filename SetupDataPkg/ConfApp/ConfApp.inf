@@ -48,7 +48,7 @@
   ResetSystemLib
   MuUefiVersionLib
   UefiBootManagerLib
-  UefiSecureBootLib
+  MuSecureBootKeySelectorLib
   JsonLiteParserLib
   FileHandleLib
   DfciUiSupportLib
