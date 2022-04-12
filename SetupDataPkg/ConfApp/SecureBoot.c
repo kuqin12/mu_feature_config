@@ -7,6 +7,7 @@
 **/
 
 #include <Uefi.h>
+#include <UefiSecureBoot.h>
 #include <Guid/ImageAuthentication.h>
 #include <Library/DebugLib.h>
 #include <Library/PcdLib.h>
@@ -16,7 +17,7 @@
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiRuntimeServicesTableLib.h>
 #include <Library/UefiLib.h>
-#include <Library/SecureBootVariableProvisionLib.h>
+#include <Library/SecureBootVariableLib.h>
 #include <Library/MuSecureBootKeySelectorLib.h>
 #include <Library/PlatformKeyStoreLib.h>
 #include <Library/ResetSystemLib.h>

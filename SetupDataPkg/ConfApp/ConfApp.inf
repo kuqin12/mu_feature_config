@@ -19,7 +19,7 @@
   BootOptions.c
   ConfApp.c
   ConfApp.h
-  # SecureBoot.c # TODO: Temporarily disable for Secure Boot library restructure in progress
+  SecureBoot.c
   SetupConf.c
   SystemInfo.c
   DfciUsb/DfciUsb.c
