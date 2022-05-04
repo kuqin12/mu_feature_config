@@ -8,6 +8,7 @@
 #ifndef CONF_APP_H_
 #define CONF_APP_H_
 
+#include <UefiSecureBoot.h>
 #include <DfciSystemSettingTypes.h>
 #include <Protocol/DfciAuthentication.h>
 #include <Protocol/DfciSettingAccess.h>
