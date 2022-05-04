@@ -437,10 +437,7 @@ ConfAppEntry (
         Status = SysInfoMgr ();
         break;
       case SecureBoot:
-        // TODO:
-        // Status = SecureBootMgr ();
-        Print (L"This feature is under construction yet, please check back later...\n");
-        mConfState = MainWait;
+        Status = SecureBootMgr ();
         break;
       case BootOption:
         Status = BootOptionMgr ();

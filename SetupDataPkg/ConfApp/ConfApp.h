@@ -57,12 +57,12 @@ typedef enum SetupConfState_t_def {
 #pragma pack (push, 1)
 
 typedef struct {
-  CHAR16    *KeyName;
-  UINT8     KeyNameTextAttr;
-  CHAR16    *Description;
-  UINT8     DescriptionTextAttr;
-  CHAR16    UnicodeChar;
-  CHAR16    ScanCode;
+  CONST CHAR16    *KeyName;
+  UINT8           KeyNameTextAttr;
+  CONST CHAR16    *Description;
+  UINT8           DescriptionTextAttr;
+  CHAR16          UnicodeChar;
+  CHAR16          ScanCode;
   UINT32    EndState;
 } ConfAppKeyOptions;
 
@@ -158,20 +158,19 @@ SysInfoMgr (
   VOID
   );
 
-// TODO: Temporarily disable for Secure Boot library restructure in progress
-// /**
-//   State machine for secure boot page. It will react to user input from keystroke
-//   to set selected secure boot option or go back to previous page.
+/**
+  State machine for secure boot page. It will react to user input from keystroke
+  to set selected secure boot option or go back to previous page.
 
-//   @retval EFI_SUCCESS           This iteration of state machine proceeds successfully.
-//   @retval Others                Failed to wait for valid keystrokes or failed to set
-//                                 platform key to variable service.
-// **/
-// EFI_STATUS
-// EFIAPI
-// SecureBootMgr (
-//   VOID
-//   );
+  @retval EFI_SUCCESS           This iteration of state machine proceeds successfully.
+  @retval Others                Failed to wait for valid keystrokes or failed to set
+                                platform key to variable service.
+**/
+EFI_STATUS
+EFIAPI
+SecureBootMgr (
+  VOID
+  );
 
 /**
   State machine for boot option page. It will react to user input from keystroke
