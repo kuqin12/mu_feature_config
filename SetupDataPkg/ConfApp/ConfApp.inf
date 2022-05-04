@@ -49,6 +49,7 @@
   MuUefiVersionLib
   UefiBootManagerLib
   MuSecureBootKeySelectorLib
+  SecureBootKeyStoreLib
   JsonLiteParserLib
   FileHandleLib
   DfciUiSupportLib

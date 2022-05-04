@@ -7,6 +7,7 @@
 **/
 
 #include <Uefi.h>
+#include <UefiSecureBoot.h>
 #include <DfciSystemSettingTypes.h>
 #include <Protocol/DfciAuthentication.h>
 
@@ -19,6 +20,7 @@
 #include <Library/ResetSystemLib.h>
 #include <Library/UefiLib.h>
 #include <Library/UefiBootManagerLib.h>
+#include <Library/SecureBootKeyStoreLib.h>
 
 #include "ConfApp.h"
 
@@ -86,6 +88,8 @@ EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL  *mSimpleTextInEx = NULL;
 DFCI_SETTING_ACCESS_PROTOCOL       *mSettingAccess  = NULL;
 DFCI_AUTH_TOKEN                    mAuthToken;
 DFCI_IDENTITY_MASK                 mIdMask;          // Identities installed
+SECURE_BOOT_PAYLOAD_INFO           *mSecureBootKeys;
+UINT8                              mSecureBootKeysCount;
 
 /**
   Polling function for key that was pressed.
@@ -358,6 +362,8 @@ ConfAppEntry (
   EFI_STATUS    Status;
   EFI_KEY_DATA  KeyData;
 
+  
+
   gBS->SetWatchdogTimer (0x0000, 0x0000, 0x0000, NULL);  // Cancel watchdog in case booted, as opposed to running in shell
 
   gST->ConOut->EnableCursor (gST->ConOut, FALSE);
@@ -383,6 +389,12 @@ ConfAppEntry (
                   );
   if (EFI_ERROR (Status)) {
     DEBUG ((DEBUG_ERROR, "Unable to locate SettingAccess. Code = %r.\n", Status));
+    goto Exit;
+  }
+
+  Status = GetPlatformKeyStore (&mSecureBootKeys, &mSecureBootKeysCount);
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR, "Failed to get platform secure boot keys. Code = %r.\n", Status));
     goto Exit;
   }
 

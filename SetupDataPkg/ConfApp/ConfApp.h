@@ -204,5 +204,7 @@ extern EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL  *mSimpleTextInEx;
 extern DFCI_SETTING_ACCESS_PROTOCOL       *mSettingAccess;
 extern DFCI_AUTH_TOKEN                    mAuthToken;
 extern DFCI_IDENTITY_MASK                 mIdMask;
+extern SECURE_BOOT_PAYLOAD_INFO           *mSecureBootKeys;
+extern UINT8                              mSecureBootKeysCount;
 
 #endif // CONF_APP_H_
