@@ -19,7 +19,7 @@
 #include <Library/UefiLib.h>
 #include <Library/SecureBootVariableLib.h>
 #include <Library/MuSecureBootKeySelectorLib.h>
-#include <Library/PlatformKeyStoreLib.h>
+#include <Library/SecureBootKeyStoreLib.h>
 #include <Library/ResetSystemLib.h>
 
 #include "ConfApp.h"
