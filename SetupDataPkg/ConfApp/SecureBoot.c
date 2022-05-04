@@ -125,17 +125,17 @@ PrintSBOptions (
     Print (L"Unknown\n");
   } else {
     gST->ConOut->SetAttribute (gST->ConOut, EFI_TEXT_ATTR (EFI_GREEN, EFI_BLACK));
-    Print (L"%s\n", mSecureBootPayload[mCurrentState].SecureBootKeyName);
+    Print (L"%s\n", mSecureBootKeys[mCurrentState].SecureBootKeyName);
   }
 
   Print (L"\n");
 
-  mSecBootOptionCount  = mSecureBootPayloadCount + 2; // Two extra options for clear and exit
+  mSecBootOptionCount  = mSecureBootKeysCount + 2; // Two extra options for clear and exit
   mSecBootStateOptions = AllocatePool (sizeof (ConfAppKeyOptions) * mSecBootOptionCount);
   mKeyNameBuffer       = AllocatePool ((sizeof (CHAR16) * 2) * mSecBootOptionCount);
-  for (Index = 0; Index < mSecureBootPayloadCount; Index++) {
+  for (Index = 0; Index < mSecureBootKeysCount; Index++) {
     CopyMem (&mSecBootStateOptions[Index], &SecureBootEnrollTemplate, sizeof (ConfAppKeyOptions));
-    mSecBootStateOptions[Index].Description = mSecureBootPayload[Index].SecureBootKeyName;
+    mSecBootStateOptions[Index].Description = mSecureBootKeys[Index].SecureBootKeyName;
     mKeyNameBuffer[Index * 2]               = L'0' + (CHAR16)Index;
     mKeyNameBuffer[Index * 2 + 1]           = L'\0';
     mSecBootStateOptions[Index].KeyName     = &mKeyNameBuffer[Index * 2];
@@ -206,7 +206,7 @@ SecureBootMgr (
           ASSERT (FALSE);
         } else if (mSecBootState == SecureBootEnroll) {
           mSelectedKeyIndex = (UINT8)(KeyData.Key.UnicodeChar - '0');
-          if (mSelectedKeyIndex >= mSecureBootPayloadCount) {
+          if (mSelectedKeyIndex >= mSecureBootKeysCount) {
             DEBUG ((DEBUG_ERROR, "%a The selected key does not exist - %d\n", __FUNCTION__, mSelectedKeyIndex));
             Status = EFI_BUFFER_TOO_SMALL;
             ASSERT (FALSE);
@@ -230,7 +230,7 @@ SecureBootMgr (
 
       break;
     case SecureBootEnroll:
-      DEBUG ((DEBUG_INFO, "Selected %s\n", mSecureBootPayload[mSelectedKeyIndex].SecureBootKeyName));
+      DEBUG ((DEBUG_INFO, "Selected %s\n", mSecureBootKeys[mSelectedKeyIndex].SecureBootKeyName));
       if (mCurrentState != mSelectedKeyIndex) {
         Status = SetSecureBootConfig (mSelectedKeyIndex);
         if (!EFI_ERROR (Status)) {
