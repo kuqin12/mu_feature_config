@@ -136,8 +136,8 @@ PrintSBOptions (
 {
   EFI_STATUS        Status;
   UINTN             Index;
-  UINT32            EnrollTextColor;
-  UINT32            ClearTextColor;
+  UINT8             EnrollTextColor;
+  UINT8             ClearTextColor;
   SecureBootState_t EnrollEndState;
   SecureBootState_t ClearEndState;
 
