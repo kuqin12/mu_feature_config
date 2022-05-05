@@ -33,6 +33,17 @@ typedef enum SysInfoState_t_def {
   SysInfoMax
 } SysInfoState_t;
 
+typedef enum {
+  SecureBootInit,
+  SecureBootWait,
+  SecureBootClear,
+  SecureBootEnroll,
+  SecureBootError,
+  SecureBootExit,
+  SecureBootConfChange,
+  SecureBootMax
+} SecureBootState_t;
+
 typedef enum BootOptState_t_def {
   BootOptInit,
   BootOptWait,

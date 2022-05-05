@@ -67,6 +67,7 @@
   gDfciAuthProvisionVarNamespace
   gDfciPermissionManagerVarNamespace
   gDfciSettingsManagerVarNamespace
+  gMuVarPolicyDxePhaseGuid
 
 [Protocols]
   gEfiSimpleTextInputExProtocolGuid

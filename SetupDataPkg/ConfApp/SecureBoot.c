@@ -9,6 +9,7 @@
 #include <Uefi.h>
 #include <UefiSecureBoot.h>
 #include <Guid/ImageAuthentication.h>
+#include <Guid/MuVarPolicyFoundationDxe.h>
 #include <Library/DebugLib.h>
 #include <Library/PcdLib.h>
 #include <Library/PrintLib.h>
@@ -23,16 +24,6 @@
 #include <Library/ResetSystemLib.h>
 
 #include "ConfApp.h"
-
-typedef enum {
-  SecureBootInit,
-  SecureBootWait,
-  SecureBootClear,
-  SecureBootEnroll,
-  SecureBootExit,
-  SecureBootConfChange,
-  SecureBootMax
-} SecureBootState_t;
 
 ConfAppKeyOptions  SecureBootClearTemplate = {
   .KeyName             = L"0",
@@ -72,6 +63,42 @@ SecureBootState_t  mSecBootState         = SecureBootInit;
 UINTN              mCurrentState         = (UINTN)-1;
 
 /**
+  Quick helper function to see if ReadyToBoot has already been signalled.
+
+  @retval     TRUE    ReadyToBoot has been signalled.
+  @retval     FALSE   Otherwise...
+
+**/
+STATIC
+BOOLEAN
+IsPostReadyToBoot (
+  VOID
+  )
+{
+  EFI_STATUS       Status;
+  UINT32           Attributes;
+  PHASE_INDICATOR  Indicator;
+  UINTN            Size;
+  static BOOLEAN   Result, Initialized = FALSE;
+
+  Size = sizeof (Indicator);
+
+  if (!Initialized) {
+    Status = gRT->GetVariable (
+                    READY_TO_BOOT_INDICATOR_VAR_NAME,
+                    &gMuVarPolicyDxePhaseGuid,
+                    &Attributes,
+                    &Size,
+                    &Indicator
+                    );
+    Result      = (!EFI_ERROR (Status) && (Attributes == READY_TO_BOOT_INDICATOR_VAR_ATTR));
+    Initialized = TRUE;
+  }
+
+  return Result;
+} // IsPostReadyToBoot()
+
+/**
   Helper internal function to reset all local variable in this file.
 **/
 STATIC
@@ -107,8 +134,12 @@ PrintSBOptions (
   VOID
   )
 {
-  EFI_STATUS  Status;
-  UINTN       Index;
+  EFI_STATUS        Status;
+  UINTN             Index;
+  UINT32            EnrollTextColor;
+  UINT32            ClearTextColor;
+  SecureBootState_t EnrollEndState;
+  SecureBootState_t ClearEndState;
 
   PrintScreenInit ();
   Print (L"Secure Boot Options:\n");
@@ -130,23 +161,37 @@ PrintSBOptions (
 
   Print (L"\n");
 
+  EnrollTextColor = SecureBootEnrollTemplate.DescriptionTextAttr;
+  ClearTextColor  = SecureBootClearTemplate.DescriptionTextAttr;
+  if ((mCurrentState != MU_SB_CONFIG_NONE) && IsPostReadyToBoot ()) {
+    Print (L"Post ready to boot, below options are view only:\n");
+    EnrollTextColor = EFI_TEXT_ATTR (EFI_DARKGRAY, EFI_BLACK);
+    ClearTextColor  = EFI_TEXT_ATTR (EFI_DARKGRAY, EFI_BLACK);
+    EnrollEndState  = SecureBootError;
+    ClearEndState   = SecureBootError;
+  }
+
   mSecBootOptionCount  = mSecureBootKeysCount + 2; // Two extra options for clear and exit
   mSecBootStateOptions = AllocatePool (sizeof (ConfAppKeyOptions) * mSecBootOptionCount);
   mKeyNameBuffer       = AllocatePool ((sizeof (CHAR16) * 2) * mSecBootOptionCount);
   for (Index = 0; Index < mSecureBootKeysCount; Index++) {
     CopyMem (&mSecBootStateOptions[Index], &SecureBootEnrollTemplate, sizeof (ConfAppKeyOptions));
-    mSecBootStateOptions[Index].Description = mSecureBootKeys[Index].SecureBootKeyName;
-    mKeyNameBuffer[Index * 2]               = L'0' + (CHAR16)Index;
-    mKeyNameBuffer[Index * 2 + 1]           = L'\0';
-    mSecBootStateOptions[Index].KeyName     = &mKeyNameBuffer[Index * 2];
-    mSecBootStateOptions[Index].UnicodeChar = '0' + (CHAR16)Index;
+    mSecBootStateOptions[Index].Description         = mSecureBootKeys[Index].SecureBootKeyName;
+    mKeyNameBuffer[Index * 2]                       = L'0' + (CHAR16)Index;
+    mKeyNameBuffer[Index * 2 + 1]                   = L'\0';
+    mSecBootStateOptions[Index].KeyName             = &mKeyNameBuffer[Index * 2];
+    mSecBootStateOptions[Index].UnicodeChar         = '0' + (CHAR16)Index;
+    mSecBootStateOptions[Index].DescriptionTextAttr = EnrollTextColor;
+    mSecBootStateOptions[Index].EndState            = EnrollEndState;
   }
 
   CopyMem (&mSecBootStateOptions[Index], &SecureBootClearTemplate, sizeof (ConfAppKeyOptions));
-  mKeyNameBuffer[Index * 2]               = L'0' + (CHAR16)Index;
-  mKeyNameBuffer[Index * 2 + 1]           = L'\0';
-  mSecBootStateOptions[Index].KeyName     = &mKeyNameBuffer[Index * 2];
-  mSecBootStateOptions[Index].UnicodeChar = '0' + (CHAR16)Index;
+  mKeyNameBuffer[Index * 2]                       = L'0' + (CHAR16)Index;
+  mKeyNameBuffer[Index * 2 + 1]                   = L'\0';
+  mSecBootStateOptions[Index].KeyName             = &mKeyNameBuffer[Index * 2];
+  mSecBootStateOptions[Index].UnicodeChar         = '0' + (CHAR16)Index;
+  mSecBootStateOptions[Index].DescriptionTextAttr = ClearTextColor;
+  mSecBootStateOptions[Index].EndState            = ClearEndState;
 
   Index++;
   CopyMem (&mSecBootStateOptions[Index], &SecureBootEscTemplate, sizeof (ConfAppKeyOptions));
@@ -242,6 +287,10 @@ SecureBootMgr (
         mSecBootState = SecureBootWait;
       }
 
+      break;
+    case SecureBootError:
+      Print (L"Cannot change secure boot settings post security boundary!");
+      mSecBootState = SecureBootWait;
       break;
     case SecureBootExit:
       ResetGlobals ();
