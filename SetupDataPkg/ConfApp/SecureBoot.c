@@ -152,7 +152,7 @@ PrintSBOptions (
     gST->ConOut->SetAttribute (gST->ConOut, EFI_TEXT_ATTR (EFI_RED, EFI_BLACK));
     Print (L"None\n");
   } else if (mCurrentState == MU_SB_CONFIG_UNKNOWN) {
-    gST->ConOut->SetAttribute (gST->ConOut, EFI_TEXT_ATTR (EFI_RED, EFI_BLACK));
+    gST->ConOut->SetAttribute (gST->ConOut, EFI_TEXT_ATTR (EFI_BLUE, EFI_BLACK));
     Print (L"Unknown\n");
   } else {
     gST->ConOut->SetAttribute (gST->ConOut, EFI_TEXT_ATTR (EFI_GREEN, EFI_BLACK));
@@ -165,10 +165,8 @@ PrintSBOptions (
   EnrollEndState  = SecureBootEnrollTemplate.EndState;
   ClearTextColor  = SecureBootClearTemplate.DescriptionTextAttr;
   ClearEndState   = SecureBootEnrollTemplate.EndState;
-  Print (L"%a Here %d\n", __FUNCTION__, __LINE__);
-  Print (L"%a Here %d %d\n", __FUNCTION__, __LINE__, IsPostReadyToBoot());
-  Print (L"%a Here %d %d\n", __FUNCTION__, __LINE__, mCurrentState);
   if ((mCurrentState != MU_SB_CONFIG_NONE) && IsPostReadyToBoot ()) {
+    gST->ConOut->SetAttribute (gST->ConOut, EFI_TEXT_ATTR (EFI_YELLOW, EFI_BLACK));
     Print (L"Post ready to boot, below options are view only:\n");
     EnrollTextColor = EFI_TEXT_ATTR (EFI_DARKGRAY, EFI_BLACK);
     ClearTextColor  = EFI_TEXT_ATTR (EFI_DARKGRAY, EFI_BLACK);
@@ -294,7 +292,7 @@ SecureBootMgr (
 
       break;
     case SecureBootError:
-      Print (L"Cannot change secure boot settings post security boundary!");
+      Print (L"Cannot change secure boot settings post security boundary!\n");
       mSecBootState = SecureBootWait;
       break;
     case SecureBootExit:
