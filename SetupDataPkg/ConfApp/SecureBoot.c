@@ -163,9 +163,9 @@ PrintSBOptions (
 
   EnrollTextColor = SecureBootEnrollTemplate.DescriptionTextAttr;
   ClearTextColor  = SecureBootClearTemplate.DescriptionTextAttr;
-  DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
-  DEBUG ((DEBUG_INFO, "%a Here %d %d\n", __FUNCTION__, __LINE__, IsPostReadyToBoot()));
-  DEBUG ((DEBUG_INFO, "%a Here %d %d\n", __FUNCTION__, __LINE__, mCurrentState));
+  Print (L"%a Here %d\n", __FUNCTION__, __LINE__);
+  Print (L"%a Here %d %d\n", __FUNCTION__, __LINE__, IsPostReadyToBoot());
+  Print (L"%a Here %d %d\n", __FUNCTION__, __LINE__, mCurrentState);
   if ((mCurrentState != MU_SB_CONFIG_NONE) && IsPostReadyToBoot ()) {
     Print (L"Post ready to boot, below options are view only:\n");
     EnrollTextColor = EFI_TEXT_ATTR (EFI_DARKGRAY, EFI_BLACK);
