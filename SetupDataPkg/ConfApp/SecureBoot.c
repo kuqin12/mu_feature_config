@@ -162,7 +162,9 @@ PrintSBOptions (
   Print (L"\n");
 
   EnrollTextColor = SecureBootEnrollTemplate.DescriptionTextAttr;
+  EnrollEndState  = SecureBootEnrollTemplate.EndState;
   ClearTextColor  = SecureBootClearTemplate.DescriptionTextAttr;
+  ClearEndState   = SecureBootEnrollTemplate.EndState;
   Print (L"%a Here %d\n", __FUNCTION__, __LINE__);
   Print (L"%a Here %d %d\n", __FUNCTION__, __LINE__, IsPostReadyToBoot());
   Print (L"%a Here %d %d\n", __FUNCTION__, __LINE__, mCurrentState);
