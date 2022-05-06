@@ -362,8 +362,6 @@ ConfAppEntry (
   EFI_STATUS    Status;
   EFI_KEY_DATA  KeyData;
 
-  
-
   gBS->SetWatchdogTimer (0x0000, 0x0000, 0x0000, NULL);  // Cancel watchdog in case booted, as opposed to running in shell
 
   gST->ConOut->EnableCursor (gST->ConOut, FALSE);
