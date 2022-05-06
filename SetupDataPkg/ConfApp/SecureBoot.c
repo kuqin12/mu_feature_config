@@ -61,6 +61,7 @@ UINT8              mSelectedKeyIndex     = MU_SB_CONFIG_NONE;
 CHAR16             *mKeyNameBuffer       = NULL;
 SecureBootState_t  mSecBootState         = SecureBootInit;
 UINTN              mCurrentState         = (UINTN)-1;
+BOOLEAN            mInitialized          = FALSE;
 
 /**
   Quick helper function to see if ReadyToBoot has already been signalled.
@@ -79,11 +80,11 @@ IsPostReadyToBoot (
   UINT32           Attributes;
   PHASE_INDICATOR  Indicator;
   UINTN            Size;
-  static BOOLEAN   Result, Initialized = FALSE;
+  static BOOLEAN   Result = FALSE;
 
   Size = sizeof (Indicator);
 
-  if (!Initialized) {
+  if (!mInitialized) {
     Status = gRT->GetVariable (
                     READY_TO_BOOT_INDICATOR_VAR_NAME,
                     &gMuVarPolicyDxePhaseGuid,
@@ -92,7 +93,7 @@ IsPostReadyToBoot (
                     &Indicator
                     );
     Result      = (!EFI_ERROR (Status) && (Attributes == READY_TO_BOOT_INDICATOR_VAR_ATTR));
-    Initialized = TRUE;
+    mInitialized = TRUE;
   }
 
   return Result;
@@ -280,6 +281,13 @@ SecureBootMgr (
     case SecureBootEnroll:
       DEBUG ((DEBUG_INFO, "Selected %s\n", mSecureBootKeys[mSelectedKeyIndex].SecureBootKeyName));
       if (mCurrentState != mSelectedKeyIndex) {
+        // First wipe off existing variables if it is enrolled somehow
+        if (mCurrentState != MU_SB_CONFIG_NONE) {
+          Status = DeleteSecureBootVariables ();
+          if (EFI_ERROR (Status)) {
+            break;
+          }
+        }
         Status = SetSecureBootConfig (mSelectedKeyIndex);
         if (!EFI_ERROR (Status)) {
           mSecBootState = SecureBootConfChange;
