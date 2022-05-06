@@ -92,7 +92,7 @@ IsPostReadyToBoot (
                     &Size,
                     &Indicator
                     );
-    Result      = (!EFI_ERROR (Status) && (Attributes == READY_TO_BOOT_INDICATOR_VAR_ATTR));
+    Result       = (!EFI_ERROR (Status) && (Attributes == READY_TO_BOOT_INDICATOR_VAR_ATTR));
     mInitialized = TRUE;
   }
 
@@ -135,12 +135,12 @@ PrintSBOptions (
   VOID
   )
 {
-  EFI_STATUS        Status;
-  UINTN             Index;
-  UINT8             EnrollTextColor;
-  UINT8             ClearTextColor;
-  SecureBootState_t EnrollEndState;
-  SecureBootState_t ClearEndState;
+  EFI_STATUS         Status;
+  UINTN              Index;
+  UINT8              EnrollTextColor;
+  UINT8              ClearTextColor;
+  SecureBootState_t  EnrollEndState;
+  SecureBootState_t  ClearEndState;
 
   PrintScreenInit ();
   Print (L"Secure Boot Options:\n");
@@ -288,6 +288,7 @@ SecureBootMgr (
             break;
           }
         }
+
         Status = SetSecureBootConfig (mSelectedKeyIndex);
         if (!EFI_ERROR (Status)) {
           mSecBootState = SecureBootConfChange;

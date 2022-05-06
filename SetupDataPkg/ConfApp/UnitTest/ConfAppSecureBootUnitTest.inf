@@ -8,7 +8,7 @@
 [Defines]
   INF_VERSION                    = 0x00010006
   BASE_NAME                      = ConfAppSecureBootUnitTest
-  FILE_GUID                      = E7217F69-7E62-4B97-944D-4D6BADC8C3B4
+  FILE_GUID                      = 98AA24A5-D73D-4CD9-8EA1-4910CB1AC551
   MODULE_TYPE                    = HOST_APPLICATION
   VERSION_STRING                 = 1.0
 

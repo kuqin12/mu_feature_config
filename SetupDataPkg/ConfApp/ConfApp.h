@@ -75,7 +75,7 @@ typedef struct {
   UINT8           DescriptionTextAttr;
   CHAR16          UnicodeChar;
   CHAR16          ScanCode;
-  UINT32    EndState;
+  UINT32          EndState;
 } ConfAppKeyOptions;
 
 STATIC_ASSERT (sizeof (UINT32) == sizeof (ConfState_t), "sizeof (UINT32) does not match sizeof (enum) in this environment");

@@ -124,7 +124,7 @@ DeleteSecureBootVariables (
   VOID
   )
 {
-  return (EFI_STATUS) mock();
+  return (EFI_STATUS)mock ();
 }
 
 /**
@@ -141,7 +141,7 @@ GetCurrentSecureBootConfig (
   VOID
   )
 {
-  return (UINTN) mock();
+  return (UINTN)mock ();
 }
 
 /**
@@ -159,7 +159,7 @@ SetSecureBootConfig (
   )
 {
   check_expected (Index);
-  return (EFI_STATUS) mock();
+  return (EFI_STATUS)mock ();
 }
 
 /**
@@ -259,11 +259,11 @@ EFI_BOOT_SERVICES  MockBoot = {
 EFI_STATUS
 EFIAPI
 MockGetVariable (
-  IN     CHAR16                      *VariableName,
-  IN     EFI_GUID                    *VendorGuid,
-  OUT    UINT32                      *Attributes     OPTIONAL,
-  IN OUT UINTN                       *DataSize,
-  OUT    VOID                        *Data           OPTIONAL
+  IN     CHAR16    *VariableName,
+  IN     EFI_GUID  *VendorGuid,
+  OUT    UINT32    *Attributes     OPTIONAL,
+  IN OUT UINTN     *DataSize,
+  OUT    VOID      *Data           OPTIONAL
   )
 {
   UINTN  Size;
@@ -469,14 +469,14 @@ SecureBootSelectOne (
   IN UNIT_TEST_CONTEXT  Context
   )
 {
-  EFI_STATUS                    Status;
-  EFI_KEY_DATA                  KeyData1;
-  SECURE_BOOT_PAYLOAD_INFO      SBKey = {
+  EFI_STATUS                Status;
+  EFI_KEY_DATA              KeyData1;
+  SECURE_BOOT_PAYLOAD_INFO  SBKey = {
     .SecureBootKeyName = L"Dummy Key"
   };
 
-  mSecureBootKeys       = &SBKey;
-  mSecureBootKeysCount  = 1;
+  mSecureBootKeys      = &SBKey;
+  mSecureBootKeysCount = 1;
 
   will_return (MockClearScreen, EFI_SUCCESS);
   will_return_always (MockSetAttribute, EFI_SUCCESS);
@@ -534,15 +534,15 @@ ConfAppSecureBootSelectMore (
   IN UNIT_TEST_CONTEXT  Context
   )
 {
-  EFI_STATUS                    Status;
-  EFI_KEY_DATA                  KeyData1;
-  SECURE_BOOT_PAYLOAD_INFO      SBKey[2] = {
-    {.SecureBootKeyName = L"Dummy Key 1"},
-    {.SecureBootKeyName = L"Dummy Key 2"},
+  EFI_STATUS                Status;
+  EFI_KEY_DATA              KeyData1;
+  SECURE_BOOT_PAYLOAD_INFO  SBKey[2] = {
+    { .SecureBootKeyName = L"Dummy Key 1" },
+    { .SecureBootKeyName = L"Dummy Key 2" },
   };
 
-  mSecureBootKeys       = SBKey;
-  mSecureBootKeysCount  = 2;
+  mSecureBootKeys      = SBKey;
+  mSecureBootKeysCount = 2;
 
   will_return (MockClearScreen, EFI_SUCCESS);
   will_return_always (MockSetAttribute, EFI_SUCCESS);
@@ -600,16 +600,16 @@ ConfAppSecureBootPostRTB (
   IN UNIT_TEST_CONTEXT  Context
   )
 {
-  EFI_STATUS                    Status;
-  POLICY_LOCK_VAR               LockVar = PHASE_INDICATOR_SET;
-  EFI_KEY_DATA                  KeyData1;
-  SECURE_BOOT_PAYLOAD_INFO      SBKey[2] = {
-    {.SecureBootKeyName = L"Dummy Key 1"},
-    {.SecureBootKeyName = L"Dummy Key 2"},
+  EFI_STATUS                Status;
+  POLICY_LOCK_VAR           LockVar = PHASE_INDICATOR_SET;
+  EFI_KEY_DATA              KeyData1;
+  SECURE_BOOT_PAYLOAD_INFO  SBKey[2] = {
+    { .SecureBootKeyName = L"Dummy Key 1" },
+    { .SecureBootKeyName = L"Dummy Key 2" },
   };
 
-  mSecureBootKeys       = SBKey;
-  mSecureBootKeysCount  = 2;
+  mSecureBootKeys      = SBKey;
+  mSecureBootKeysCount = 2;
 
   will_return (MockClearScreen, EFI_SUCCESS);
   will_return_always (MockSetAttribute, EFI_SUCCESS);
@@ -664,15 +664,15 @@ ConfAppSecureBootUpdateKeys (
   IN UNIT_TEST_CONTEXT  Context
   )
 {
-  EFI_STATUS                    Status;
-  EFI_KEY_DATA                  KeyData1;
-  SECURE_BOOT_PAYLOAD_INFO      SBKey[2] = {
-    {.SecureBootKeyName = L"Dummy Key 1"},
-    {.SecureBootKeyName = L"Dummy Key 2"},
+  EFI_STATUS                Status;
+  EFI_KEY_DATA              KeyData1;
+  SECURE_BOOT_PAYLOAD_INFO  SBKey[2] = {
+    { .SecureBootKeyName = L"Dummy Key 1" },
+    { .SecureBootKeyName = L"Dummy Key 2" },
   };
 
-  mSecureBootKeys       = SBKey;
-  mSecureBootKeysCount  = 2;
+  mSecureBootKeys      = SBKey;
+  mSecureBootKeysCount = 2;
 
   will_return (MockClearScreen, EFI_SUCCESS);
   will_return_always (MockSetAttribute, EFI_SUCCESS);
