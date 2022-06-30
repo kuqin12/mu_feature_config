@@ -467,7 +467,7 @@ class application(tkinter.Frame):
         menubar = tkinter.Menu(root)
         file_menu = tkinter.Menu(menubar, tearoff=0)
         file_menu.add_command(
-            label="Open Config file...", command=self.load_from_yaml
+            label="Open Config file...", command=self.load_from_ml
         )
         file_menu.add_command(
             label=self.menu_string[0], command=self.save_to_bin, state="disabled"
