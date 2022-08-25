@@ -26,4 +26,4 @@
   DebugLib
 
 [Guids]
-  gSetupConfigPolicyVariableGuid
+  gSetupDataPkgGenericProfileGuid

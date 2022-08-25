@@ -59,7 +59,7 @@ ParseActiveConfigVarList (
 
   // Populate the slot with default one from FV.
   Status = GetSectionFromAnyFv (
-             &gSetupConfigPolicyVariableGuid,
+             &gSetupDataPkgGenericProfileGuid,
              EFI_SECTION_RAW,
              0,
              (VOID **)&BlobPtr,
