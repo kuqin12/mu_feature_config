@@ -650,23 +650,23 @@ CreateXmlStringFromCurrentSettings (
   if ((XmlString == NULL) || (StringSize == NULL)) {
     return EFI_INVALID_PARAMETER;
   }
-
+DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
   PERF_FUNCTION_BEGIN ();
-
+DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
   // create basic xml
   Status = gRT->GetTime (&Time, NULL);
   if (EFI_ERROR (Status)) {
     DEBUG ((DEBUG_ERROR, "%a - Failed to get time. %r\n", __FUNCTION__, Status));
     goto EXIT;
   }
-
+DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
   List = New_CurrentSettingsPacketNodeList (&Time);
   if (List == NULL) {
     DEBUG ((DEBUG_ERROR, "%a - Failed to create new Current Settings Packet List Node\n", __FUNCTION__));
     Status = EFI_ABORTED;
     goto EXIT;
   }
-
+DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
   // Get SettingsPacket Node
   CurrentSettingsNode = GetCurrentSettingsPacketNode (List);
   if (CurrentSettingsNode == NULL) {
@@ -674,7 +674,7 @@ CreateXmlStringFromCurrentSettings (
     Status = EFI_NO_MAPPING;
     goto EXIT;
   }
-
+DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
   // Record Status result
   //
   // Add the Lowest Supported Version Node
@@ -686,7 +686,7 @@ CreateXmlStringFromCurrentSettings (
     DEBUG ((DEBUG_INFO, "Failed to set LSV Node for current settings. %r\n", Status));
     goto EXIT;
   }
-
+DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
   //
   // Get the Settings Node List Node
   //
@@ -696,18 +696,19 @@ CreateXmlStringFromCurrentSettings (
     Status = EFI_NO_MAPPING;
     goto EXIT;
   }
-
+DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
   Status = RetrieveActiveConfigVarList (&VarListEntries, &VarListEntriesCount);
   if (EFI_ERROR (Status)) {
     DEBUG ((DEBUG_ERROR, "Retrieving config data failed - %r\n", Status));
     goto EXIT;
   }
-
+DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
   FreePool (Data);
   Data = NULL;
-
+DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
   // Now get the individual settings
   for (Index = 0; Index < VarListEntriesCount; Index++) {
+    DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
     AsciiSize = StrnLenS (VarListEntries[Index].Name, DFCI_MAX_ID_LEN) + 1;
     AsciiName = AllocatePool (AsciiSize);
     if (AsciiName == NULL) {
@@ -715,9 +716,9 @@ CreateXmlStringFromCurrentSettings (
       Status = EFI_OUT_OF_RESOURCES;
       goto EXIT;
     }
-
+DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
     AsciiSPrint (AsciiName, AsciiSize, "%s", VarListEntries[Index].Name);
-
+DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
     DataSize = 0;
     Status   = mSettingAccess->Get (
                                  mSettingAccess,
@@ -728,17 +729,18 @@ CreateXmlStringFromCurrentSettings (
                                  &Dummy,
                                  &Flags
                                  );
+                                 DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
     if (Status != EFI_BUFFER_TOO_SMALL) {
       DEBUG ((DEBUG_ERROR, "%a - Get binary configuration size returned unexpected result = %r\n", __FUNCTION__, Status));
       goto EXIT;
     }
-
+DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
     Data = AllocatePool (DataSize);
     if (Data == NULL) {
       Status = EFI_OUT_OF_RESOURCES;
       goto EXIT;
     }
-
+DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
     Status = mSettingAccess->Get (
                                mSettingAccess,
                                AsciiName,
@@ -748,11 +750,12 @@ CreateXmlStringFromCurrentSettings (
                                Data,
                                &Flags
                                );
+                               DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
     if (EFI_ERROR (Status)) {
       DEBUG ((DEBUG_ERROR, "%a - Get binary configuration data returned unexpected result = %r\n", __FUNCTION__, Status));
       goto EXIT;
     }
-
+DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
     // First encode the binary blob
     EncodedSize = 0;
     Status      = Base64Encode (Data, DataSize, NULL, &EncodedSize);
@@ -761,67 +764,71 @@ CreateXmlStringFromCurrentSettings (
       Status = EFI_INVALID_PARAMETER;
       goto EXIT;
     }
-
+DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
     EncodedBuffer = (CHAR8 *)AllocatePool (EncodedSize);
     if (EncodedBuffer == NULL) {
       DEBUG ((DEBUG_ERROR, "Cannot allocate encoded buffer of size 0x%x.\n", EncodedSize));
       Status = EFI_OUT_OF_RESOURCES;
       goto EXIT;
     }
-
+DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
     Status = Base64Encode (Data, DataSize, EncodedBuffer, &EncodedSize);
     if (EFI_ERROR (Status)) {
       DEBUG ((DEBUG_ERROR, "Failed to encode binary data into Base 64 format. Code = %r\n", Status));
       return EFI_INVALID_PARAMETER;
     }
-
+DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
     Status = SetCurrentSettings (CurrentSettingsListNode, AsciiName, EncodedBuffer);
-
+DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
     if (EFI_ERROR (Status)) {
       DEBUG ((DEBUG_ERROR, "%a - Error from Set Current Settings.  Status = %r\n", __FUNCTION__, Status));
     }
-
+DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
     FreePool (Data);
     Data = NULL;
   }
-
+DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
   // now output as xml string
   Status = XmlTreeToString (List, TRUE, StringSize, XmlString);
   if (EFI_ERROR (Status)) {
     DEBUG ((DEBUG_ERROR, "%a - XmlTreeToString failed.  %r\n", __FUNCTION__, Status));
   }
-
+DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
 EXIT:
+DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
   if (List != NULL) {
     FreeXmlTree (&List);
   }
-
+DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
   if (Data != NULL) {
     FreePool (Data);
   }
-
+DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
   if (EncodedBuffer != NULL) {
     FreePool (EncodedBuffer);
   }
-
+DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
   if (VarListEntries != NULL) {
+    DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
     for (Index = 0; Index < VarListEntriesCount; Index++) {
       FreePool (VarListEntries[Index].Name);
       FreePool (VarListEntries[Index].Data);
     }
-
+DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
     FreePool (VarListEntries);
   }
-
+DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
   if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
     // free memory since it was an error
     if (*XmlString != NULL) {
       FreePool (*XmlString);
       *XmlString  = NULL;
       *StringSize = 0;
     }
+    DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
   }
-
+DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
   PERF_FUNCTION_END ();
   return Status;
 }
