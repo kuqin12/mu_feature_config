@@ -703,9 +703,6 @@ DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
     goto EXIT;
   }
 DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
-  FreePool (Data);
-  Data = NULL;
-DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
   // Now get the individual settings
   for (Index = 0; Index < VarListEntriesCount; Index++) {
     DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
