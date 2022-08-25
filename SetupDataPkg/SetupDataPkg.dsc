@@ -77,7 +77,7 @@
   SetupDataPkg/Library/ConfigDataLib/ConfigDataLib.inf
   SetupDataPkg/Library/ConfigBlobBaseLib/ConfigBlobBaseLib.inf
   SetupDataPkg/Library/ConfigVariableListLibNull/ConfigVariableListLibNull.inf
-
+  SetupDataPkg/Library/ConfigVariableListLib/ConfigVariableListLib.inf
   SetupDataPkg/ConfDataSettingProvider/ConfDataSettingProvider.inf
 
 [Components.X64, Components.AARCH64]
