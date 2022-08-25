@@ -923,24 +923,33 @@ SetupConfMgr (
       break;
     case SetupConfDumpSerial:
       // Clear screen
+      DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
       PrintScreenInit ();
+      DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
       Status = CreateXmlStringFromCurrentSettings (&StrBuf, &StrBufSize);
+      DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
       if (EFI_ERROR (Status)) {
         Print (L"\nFailed to print current settings in SVD format - %r\n", Status);
         Status = EFI_SUCCESS;
       } else {
+        DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
         Print (L"\nCurrent configurations are dumped Below in format of *.SVD:\n");
         Print (L"\n");
+        DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
         Index = 0;
+        DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
         while (Index < StrBufSize) {
+          DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
           PrintedUnicode = Print (L"%a", &StrBuf[Index]);
+          DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
           Index         += PrintedUnicode;
           if (PrintedUnicode == 0) {
             // So that we will not get stuck if Print function malfunctions
             break;
           }
+          DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
         }
-
+DEBUG ((DEBUG_INFO, "%a Here %d\n", __FUNCTION__, __LINE__));
         Print (L"\n");
       }
 
