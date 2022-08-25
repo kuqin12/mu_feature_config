@@ -25,5 +25,5 @@
   BaseLib
   DebugLib
 
-[Guids]
-  gSetupDataPkgGenericProfileGuid
+[Pcd]
+  gSetupDataPkgTokenSpaceGuid.PcdSetupConfigActiveProfileFile
