@@ -587,6 +587,8 @@ SettingsProviderSupportProtocolNotify (
     goto Done;
   }
 
+  DUMP_HEX (DEBUG_ERROR, 0, VarList, VarListCount * sizeof (*VarList), "");
+
   for (Index = 0; Index < VarListCount; Index++) {
     // Using default blob to initialize individual setting providers
     Status = RegisterSingleConfigVariable (&VarList[Index]);
