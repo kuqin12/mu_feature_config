@@ -590,6 +590,7 @@ SettingsProviderSupportProtocolNotify (
   for (Index = 0; Index < VarListCount; Index++) {
     // Using default blob to initialize individual setting providers
     Status = RegisterSingleConfigVariable (&VarList[Index]);
+    DEBUG ((DEBUG_ERROR, "%a Here %d - %s\n", __FUNCTION__, __LINE__, VarList[Index].Name));
     if (EFI_ERROR (Status)) {
       DEBUG ((DEBUG_ERROR, "%a - Failed to register single config variable - %r\n", __FUNCTION__, Status));
       break;
