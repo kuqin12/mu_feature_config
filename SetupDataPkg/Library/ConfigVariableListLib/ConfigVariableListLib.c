@@ -63,7 +63,7 @@ ParseActiveConfigVarList (
   }
 
   *ConfigVarListCount = 0;
-
+DEBUG ((DEBUG_ERROR, "%a Here (%g)\n", __FUNCTION__, PcdGetPtr (PcdSetupConfigActiveProfileFile)));
   // Populate the slot with default one from FV.
   Status = GetSectionFromAnyFv (
              (EFI_GUID *)PcdGetPtr (PcdSetupConfigActiveProfileFile),
