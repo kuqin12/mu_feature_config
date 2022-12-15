@@ -728,6 +728,22 @@ CreateXmlStringFromCurrentSettings (
   }
 
   // TODO: Need to handle active profile selected display...
+  if (!IsSystemInManufacturingMode ()) {
+    Status = RetrieveActiveProfileGuid ();
+    
+
+    Status = Base64Encode (Data, DataSize, EncodedBuffer, &EncodedSize);
+    if (EFI_ERROR (Status)) {
+      DEBUG ((DEBUG_ERROR, "Failed to encode binary data into Base 64 format. Code = %r\n", Status));
+      return EFI_INVALID_PARAMETER;
+    }
+
+    Status = SetCurrentSettings (CurrentSettingsListNode, AsciiName, EncodedBuffer);
+
+    if (EFI_ERROR (Status)) {
+      DEBUG ((DEBUG_ERROR, "%a - Error from Set Current Settings.  Status = %r\n", __FUNCTION__, Status));
+    }
+  }
 
   NameSize = sizeof (CHAR16);
   Name     = AllocateZeroPool (NameSize);
