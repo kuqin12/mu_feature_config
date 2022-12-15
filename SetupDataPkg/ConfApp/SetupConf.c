@@ -730,18 +730,25 @@ CreateXmlStringFromCurrentSettings (
   // TODO: Need to handle active profile selected display...
   if (!IsSystemInManufacturingMode ()) {
     Status = RetrieveActiveProfileGuid ();
-    
+    if (EFI_ERROR (Status)) {
+      DEBUG ((DEBUG_ERROR, "Failed to encode binary data into Base 64 format. Code = %r\n", Status));
+      Status = EFI_INVALID_PARAMETER;
+      goto EXIT;
+    }
 
     Status = Base64Encode (Data, DataSize, EncodedBuffer, &EncodedSize);
     if (EFI_ERROR (Status)) {
       DEBUG ((DEBUG_ERROR, "Failed to encode binary data into Base 64 format. Code = %r\n", Status));
-      return EFI_INVALID_PARAMETER;
+      Status = EFI_INVALID_PARAMETER;
+      goto EXIT;
     }
 
     Status = SetCurrentSettings (CurrentSettingsListNode, AsciiName, EncodedBuffer);
-
     if (EFI_ERROR (Status)) {
       DEBUG ((DEBUG_ERROR, "%a - Error from Set Current Settings.  Status = %r\n", __FUNCTION__, Status));
+      goto EXIT;
+    } else {
+      goto ConstructXml;
     }
   }
 
@@ -899,7 +906,8 @@ CreateXmlStringFromCurrentSettings (
     Status = Base64Encode (Data, DataSize, EncodedBuffer, &EncodedSize);
     if (EFI_ERROR (Status)) {
       DEBUG ((DEBUG_ERROR, "Failed to encode binary data into Base 64 format. Code = %r\n", Status));
-      return EFI_INVALID_PARAMETER;
+      Status = EFI_INVALID_PARAMETER;
+      goto EXIT;
     }
 
     Status = SetCurrentSettings (CurrentSettingsListNode, AsciiName, EncodedBuffer);
@@ -912,6 +920,7 @@ CreateXmlStringFromCurrentSettings (
     Data = NULL;
   }
 
+ConstructXml:
   // now output as xml string
   Status = XmlTreeToString (List, TRUE, StringSize, XmlString);
   if (EFI_ERROR (Status)) {
