@@ -769,14 +769,14 @@ CreateXmlStringFromCurrentSettings (
       // Do the same DFCI stuff
       DataSize = 0;
       Status   = mSettingAccess->Get (
-                                  mSettingAccess,
-                                  AsciiName,
-                                  &mAuthToken,
-                                  DFCI_SETTING_TYPE_BINARY,
-                                  &DataSize,
-                                  &Dummy,
-                                  &Flags
-                                  );
+                                   mSettingAccess,
+                                   AsciiName,
+                                   &mAuthToken,
+                                   DFCI_SETTING_TYPE_BINARY,
+                                   &DataSize,
+                                   &Dummy,
+                                   &Flags
+                                   );
       if (Status != EFI_BUFFER_TOO_SMALL) {
         DEBUG ((DEBUG_ERROR, "%a - Get binary configuration size returned unexpected result = %r\n", __FUNCTION__, Status));
         goto EXIT;
@@ -789,14 +789,14 @@ CreateXmlStringFromCurrentSettings (
       }
 
       Status = mSettingAccess->Get (
-                                mSettingAccess,
-                                AsciiName,
-                                &mAuthToken,
-                                DFCI_SETTING_TYPE_BINARY,
-                                &DataSize,
-                                Data,
-                                &Flags
-                                );
+                                 mSettingAccess,
+                                 AsciiName,
+                                 &mAuthToken,
+                                 DFCI_SETTING_TYPE_BINARY,
+                                 &DataSize,
+                                 Data,
+                                 &Flags
+                                 );
       if (EFI_ERROR (Status)) {
         DEBUG ((DEBUG_ERROR, "%a - Get binary configuration data returned unexpected result = %r\n", __FUNCTION__, Status));
         goto EXIT;
@@ -804,19 +804,20 @@ CreateXmlStringFromCurrentSettings (
     } else {
       // Put variables into the variable list structure
       DataSize = 0;
-      Status   = gRT->GetVariable (Name,
-                                  &Guid,
-                                  &Attributes,
-                                  &DataSize,
-                                  NULL
-                                  );
+      Status   = gRT->GetVariable (
+                        Name,
+                        &Guid,
+                        &Attributes,
+                        &DataSize,
+                        NULL
+                        );
       if (Status != EFI_BUFFER_TOO_SMALL) {
         DEBUG ((DEBUG_ERROR, "%a - Get binary configuration size returned unexpected result = %r\n", __FUNCTION__, Status));
         goto EXIT;
       }
 
       NeededSize = sizeof (CONFIG_VAR_LIST_HDR) + NameSize + DataSize + sizeof (EFI_GUID) +
-                  sizeof (Attributes) + sizeof (UINT32);
+                   sizeof (Attributes) + sizeof (UINT32);
 
       Data = AllocatePool (NeededSize);
       if (Data == NULL) {
@@ -826,37 +827,38 @@ CreateXmlStringFromCurrentSettings (
 
       Offset = 0;
       // Header
-      ((CONFIG_VAR_LIST_HDR*)Data)->NameSize = (UINT32)NameSize;
-      ((CONFIG_VAR_LIST_HDR*)Data)->DataSize = (UINT32)DataSize;
-      Offset += sizeof (CONFIG_VAR_LIST_HDR);
+      ((CONFIG_VAR_LIST_HDR *)Data)->NameSize = (UINT32)NameSize;
+      ((CONFIG_VAR_LIST_HDR *)Data)->DataSize = (UINT32)DataSize;
+      Offset                                 += sizeof (CONFIG_VAR_LIST_HDR);
 
       // Name
-      CopyMem ((UINT8*)Data + Offset, Name, NameSize);
+      CopyMem ((UINT8 *)Data + Offset, Name, NameSize);
       Offset += NameSize;
 
       // Guid
-      CopyMem ((UINT8*)Data + Offset, &Guid, sizeof (Guid));
+      CopyMem ((UINT8 *)Data + Offset, &Guid, sizeof (Guid));
       Offset += sizeof (Guid);
 
       // Attributes
-      CopyMem ((UINT8*)Data + Offset, &Attributes, sizeof (Attributes));
+      CopyMem ((UINT8 *)Data + Offset, &Attributes, sizeof (Attributes));
       Offset += sizeof (Attributes);
 
       // Data
-      Status = gRT->GetVariable (Name,
-                                &Guid,
-                                &Attributes,
-                                &DataSize,
-                                (UINT8*)Data + Offset
-                                );
+      Status = gRT->GetVariable (
+                      Name,
+                      &Guid,
+                      &Attributes,
+                      &DataSize,
+                      (UINT8 *)Data + Offset
+                      );
       if (EFI_ERROR (Status)) {
         DEBUG ((DEBUG_ERROR, "%a - Get binary configuration data returned unexpected result = %r\n", __FUNCTION__, Status));
         goto EXIT;
       }
 
       // CRC32
-      *(UINT32 *)((UINT8*)Data + Offset) = CalculateCrc32 (Data, Offset);
-      Offset                     += sizeof (UINT32);
+      *(UINT32 *)((UINT8 *)Data + Offset) = CalculateCrc32 (Data, Offset);
+      Offset                             += sizeof (UINT32);
 
       // They should still match in size...
       ASSERT (Offset == NeededSize);
