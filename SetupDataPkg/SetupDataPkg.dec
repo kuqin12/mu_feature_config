@@ -33,4 +33,9 @@
   ## Name of file to be looked up by ConfApp on the USB disk for configuration application.
   gSetupDataPkgTokenSpaceGuid.PcdConfigurationFileName|L"SetupConfUpdate.svd"|VOID*|0x30000001
 
+  ## List of target configuration policy GUIDs. Platform should override this value as the default is empty.
+  ## This list is used to display the currently active configuration data through policy service in SVD
+  ## format in ConfApp.
+  gSetupDataPkgTokenSpaceGuid.PcdConfigurationPolicyGuidList|{0}|VOID*|0x30000002
+
 [PcdsFeatureFlag]
