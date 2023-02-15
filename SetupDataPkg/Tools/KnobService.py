@@ -246,7 +246,7 @@ def write_uefi_getter_implementations(efi_type, out, schema):
         out.write(get_line_ending(efi_type))
 
         out.write(get_spacing_string(efi_type))
-        out.write("CopyMem(Knob, CachedPolicy + Offset, sizeof ({});".format(
+        out.write("CopyMem(Knob, CachedPolicy + Offset, sizeof ({}));".format(
             get_type_string(knob.format.c_type, efi_type)
         ) + get_line_ending(efi_type))
 
