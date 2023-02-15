@@ -373,14 +373,24 @@ def generate_public_header(schema, header_path, efi_type=False):
                             subknob.format.object_to_string(subknob.max, format_options)) + get_line_ending(efi_type))
 
             out.write("" + get_line_ending(efi_type))
-            out.write("// Get the current value of the {} knob".format(knob.name) + get_line_ending(efi_type))
-            out.write("{} {}{}();".format(
-                get_type_string(knob.format.c_type, efi_type),
-                naming_convention_filter("config_get_",
-                                         False,
-                                         efi_type),
-                knob.name))
-            out.write("" + get_line_ending(efi_type))
+            # uefi has getters return a status and pass in a ptr
+            if not efi_type:
+                out.write("// Get the current value of the {} knob".format(knob.name) + get_line_ending(efi_type))
+                out.write("{} {}{}();".format(
+                    get_type_string(knob.format.c_type, efi_type),
+                    naming_convention_filter("config_get_",
+                                            False,
+                                            efi_type),
+                    knob.name))
+                out.write("" + get_line_ending(efi_type))
+            else:
+                out.write("EFI_STATUS {}{} (".format(
+                    naming_convention_filter("config_get_", False, efi_type),
+                    knob.name
+                ))
+                out.write("{} *Knob);".format(
+                    get_type_string(knob.format.c_type, efi_type)
+                ) + get_line_ending(efi_type))
 
             # no concept of setting config variables in UEFI
             if not efi_type:
