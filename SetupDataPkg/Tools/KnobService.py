@@ -184,12 +184,14 @@ def write_uefi_getter_implementations(efi_type, out, schema):
             out.write("// {}".format(knob.help) + get_line_ending(efi_type))
 
         out.write("// Get the current value of the {} knob".format(knob.name) + get_line_ending(efi_type))
-        out.write("{} {}{} (".format(
-            get_type_string(knob.format.c_type, efi_type),
+        out.write("EFI_STATUS {}{} (".format(
             naming_convention_filter("config_get_", False, efi_type),
             knob.name
         ) + get_line_ending(efi_type))
-        out.write(get_spacing_string(efi_type) + "VOID" + get_line_ending(efi_type))
+        out.write(get_spacing_string(efi_type))
+        out.write("{} *Knob".format(
+            get_type_string(knob.format.c_type, efi_type)
+        ) + get_line_ending(efi_type))
         out.write(get_spacing_string(efi_type) + ")" + get_line_ending(efi_type))
         out.write("{" + get_line_ending(efi_type))
         out.write(get_spacing_string(efi_type) + "EFI_STATUS Status;")
@@ -206,6 +208,15 @@ def write_uefi_getter_implementations(efi_type, out, schema):
 
         # for the next offset, move past data and CRC32
         offset += 4 + knob.format.size_in_bytes()
+
+        out.write(get_spacing_string(efi_type))
+        out.write("if (Knob == NULL) {" + get_line_ending(efi_type))
+        out.write(get_spacing_string(efi_type, num=2))
+        out.write("return EFI_INVALID_PARAMETER;" + get_line_ending(efi_type))
+        out.write(get_spacing_string(efi_type))
+        out.write("}" + get_line_ending(efi_type))
+        out.write(get_line_ending(efi_type))
+
         out.write(get_spacing_string(efi_type))
         out.write("if (!CachedPolicyInitialized) {" + get_line_ending(efi_type))
         out.write(get_spacing_string(efi_type, num=2))
@@ -215,9 +226,7 @@ def write_uefi_getter_implementations(efi_type, out, schema):
         out.write(get_spacing_string(efi_type, num=3))
         out.write("ASSERT (FALSE);" + get_line_ending(efi_type))
         out.write(get_spacing_string(efi_type, num=3))
-        out.write("return ({})0;".format(
-            get_type_string(knob.format.c_type, efi_type)
-        ) + get_line_ending(efi_type))
+        out.write("return Status;" + get_line_ending(efi_type))
         out.write(get_spacing_string(efi_type, num=2))
         out.write("}" + get_line_ending(efi_type))
         out.write(get_spacing_string(efi_type))
@@ -231,17 +240,18 @@ def write_uefi_getter_implementations(efi_type, out, schema):
         out.write(get_spacing_string(efi_type, num=2))
         out.write("ASSERT (FALSE);" + get_line_ending(efi_type))
         out.write(get_spacing_string(efi_type, num=2))
-        out.write("return ({})0;".format(
-            get_type_string(knob.format.c_type, efi_type)
-        ) + get_line_ending(efi_type))
+        out.write("return EFI_COMPROMISED_DATA;" + get_line_ending(efi_type))
         out.write(get_spacing_string(efi_type))
         out.write("}" + get_line_ending(efi_type))
         out.write(get_line_ending(efi_type))
 
         out.write(get_spacing_string(efi_type))
-        out.write("return ({})CachedPolicy[Offset];".format(
+        out.write("CopyMem(Knob, CachedPolicy + Offset, sizeof ({});".format(
             get_type_string(knob.format.c_type, efi_type)
         ) + get_line_ending(efi_type))
+
+        out.write(get_spacing_string(efi_type))
+        out.write("return EFI_SUCCESS;" + get_line_ending(efi_type))
         out.write("}" + get_line_ending(efi_type))
         out.write(get_line_ending(efi_type))
         pass
