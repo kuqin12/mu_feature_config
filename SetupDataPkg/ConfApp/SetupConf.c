@@ -702,16 +702,16 @@ CreateXmlStringFromCurrentSettings (
   }
 
   // Inspect the size of PCD first.
-  NumPolicies = PcdGetSize (PcdConfigurationPolicyGuidList);
+  NumPolicies = PcdGetSize (PcdConfigurationPolicyGuid);
 
   // if we get a bad size for the configuration GUID list, we just fail...
   if ((NumPolicies == 0) || (NumPolicies % sizeof (EFI_GUID) != 0)) {
-    DEBUG ((DEBUG_ERROR, "%a Invalid number of bytes in PcdConfigurationPolicyGuidList: %u!\n", __FUNCTION__, NumPolicies));
+    DEBUG ((DEBUG_ERROR, "%a Invalid number of bytes in PcdConfigurationPolicyGuid: %u!\n", __FUNCTION__, NumPolicies));
     ASSERT (FALSE);
   } else {
     NumPolicies /= sizeof (EFI_GUID);
 
-    TargetGuids = (EFI_GUID *)PcdGetPtr (PcdConfigurationPolicyGuidList);
+    TargetGuids = (EFI_GUID *)PcdGetPtr (PcdConfigurationPolicyGuid);
 
     // if the PCD is not specified, there is nothing we can dump here...
     if (TargetGuids == NULL) {

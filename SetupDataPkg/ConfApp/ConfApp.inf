@@ -62,7 +62,7 @@
 [Pcd]
   gEfiMdeModulePkgTokenSpaceGuid.PcdMaxVariableSize
   gSetupDataPkgTokenSpaceGuid.PcdConfigurationFileName
-  gSetupDataPkgTokenSpaceGuid.PcdConfigurationPolicyGuidList
+  gSetupDataPkgTokenSpaceGuid.PcdConfigurationPolicyGuid
 
 [Protocols]
   gEfiSimpleTextInputExProtocolGuid

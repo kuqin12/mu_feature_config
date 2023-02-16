@@ -968,7 +968,8 @@ def generate_getter_implementation(schema, header_path, efi_type):
         out.write(get_line_ending(efi_type))
 
         out.write(get_spacing_string(efi_type))
-        out.write("Status = PolPpi->GetPolicy (&gOemConfigPolicyGuid, NULL,")
+        out.write("Status = PolPpi->GetPolicy (")
+        out.write("PcdGetPtr (PcdConfigurationPolicyGuid), NULL,")
         out.write(" CachedPolicy, &ConfPolSize);" + get_line_ending(efi_type))
         out.write(get_spacing_string(efi_type))
         out.write("if ((EFI_ERROR (Status)) || (ConfPolSize != CachedPolicySize)) {" + get_line_ending(efi_type))
