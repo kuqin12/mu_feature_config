@@ -61,7 +61,11 @@ GetConfigKnobOverride (
   // Check size in variable storage
   Status = GetConfigKnobFromVariable (ConfigKnobGuid, ConfigKnobName, NULL, &VariableSize);
 
-  if ((VariableSize != 0) && (ConfigKnobDataSize != VariableSize)) {
+  if ((Status != EFI_BUFFER_TOO_SMALL) && EFI_ERROR (Status)) {
+    goto Exit;
+  }
+
+  if (ConfigKnobDataSize != VariableSize) {
     // we will only accept this variable if it is the correct size
     Status = EFI_BAD_BUFFER_SIZE;
   } else if (Status == EFI_BUFFER_TOO_SMALL) {
@@ -70,6 +74,7 @@ GetConfigKnobOverride (
     Status = GetConfigKnobFromVariable (ConfigKnobGuid, ConfigKnobName, ConfigKnobData, &VariableSize);
   }
 
+Exit:
   if (EFI_ERROR (Status)) {
     // we didn't find the override in variable storage, which is expected if the knob has not been overridden, or
     // the size mismatched. Only debug verbose here as this is expected to happen in the majority of cases.
@@ -84,6 +89,5 @@ GetConfigKnobOverride (
       ));
   }
 
-Exit:
   return Status;
 }
