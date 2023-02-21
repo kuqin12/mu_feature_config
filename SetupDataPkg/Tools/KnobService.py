@@ -727,11 +727,12 @@ def generate_cached_implementation(schema, header_path, efi_type=False):
                         path = subknob.name[len(knob.name):]
                         define_name = subknob.name.replace('[', '_').replace(']', '_').replace('.', '__')
                         if isinstance(subknob.format, VariableList.EnumFormat):
-                            out.write(get_spacing_string(efi_type) + "if (!{}{}((*{}){})) {{".format(
+                            out.write(get_spacing_string(efi_type) + "if (!{}{}({}->{})) {{".format(
                                 naming_convention_filter("validate_enum_value_", False, efi_type),
                                 subknob.format.name,
                                 naming_convention_filter("value", False, efi_type),
-                                path
+                                # don't take the '.'
+                                path[1:]
                             ))
                             out.write(get_line_ending(efi_type))
                             out.write(get_spacing_string(efi_type, num=2))
@@ -743,9 +744,10 @@ def generate_cached_implementation(schema, header_path, efi_type=False):
                         else:
                             if subknob.min != subknob.format.min:
                                 out.write(get_spacing_string(efi_type))
-                                out.write("if ((*{}){} < KNOB__{}__MIN) {{".format(
+                                out.write("if ({}->{} < KNOB__{}__MIN) {{".format(
                                     naming_convention_filter("value", False, efi_type),
-                                    path,
+                                    # don't take the '.'
+                                    path[1:],
                                     define_name
                                 ))
                                 out.write(get_line_ending(efi_type))
@@ -757,9 +759,10 @@ def generate_cached_implementation(schema, header_path, efi_type=False):
                                 out.write(get_spacing_string(efi_type) + "}" + get_line_ending(efi_type))
                             if subknob.max != subknob.format.max:
                                 out.write(get_spacing_string(efi_type))
-                                out.write("if ((*{}){} > KNOB__{}__MAX) {{".format(
+                                out.write("if ({}->{} > KNOB__{}__MAX) {{".format(
                                     naming_convention_filter("value", False, efi_type),
-                                    path,
+                                    # don't take the '.'
+                                    path[1:],
                                     define_name
                                 ))
                                 out.write(get_line_ending(efi_type))
